@@ -1,5 +1,8 @@
 var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
+var repoContainerEl = document.querySelector("#repos-container");
+var reposSearchTerm = document.querySelector("#repo-search-term");
+
 
 var getUserRepos = function(user) {
     // github api url format
@@ -7,7 +10,7 @@ var getUserRepos = function(user) {
 
     fetch(apiUrl).then(function(response){
         response.json().then(function(data){
-            console.log(data);
+            displayRepos(data, user);
         });
     });
 };
@@ -24,6 +27,9 @@ var formSubmitHandler = function(event) {
     }
 };
 
-userFormEl.addEventListener("submit", formSubmitHandler);
+var displayRepos = function(repos, searchTerm) {
+    repoContainerEl.textContent = "";
+    reposSearchTerm.textContent = searchTerm;
+};
 
-getUserRepos("dmschwerd");
+userFormEl.addEventListener("submit", formSubmitHandler);
