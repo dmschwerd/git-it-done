@@ -1,4 +1,5 @@
 var issueContainerEl = document.querySelector("#issues-container");
+var limitWarningEl = document.querySelector("#limit-warning");
 
 var getReposIssues = function(repo) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
@@ -7,6 +8,10 @@ var getReposIssues = function(repo) {
         if(response.ok) {
             response.json().then(function(data) {
                 displayIssues(data);
+
+                if(response.headers.get("Link")) {
+                    displayWarning(repo);
+                }
             });
         } else {
             alert("There was a problem with your request");
@@ -44,4 +49,14 @@ var displayIssues = function(issues) {
     }
 };
 
-getReposIssues("dmschwerd/taskinator");
+var displayWarning = function(repo) {
+    limitWarningEl.textContent = "Click here to ";
+    var linkEl = document.createElement("a");
+    linkEl.textContent = "see more Issues on GitHub.com";
+    linkEl.setAttribute("href", "https://github.com/" + repo + "/issues");
+    linkEl.setAttribute("target", "_blank");
+
+    limitWarningEl.appendChild(linkEl);
+};
+
+getReposIssues("facebook/react");
